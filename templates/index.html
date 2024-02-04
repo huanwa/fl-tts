@@ -73,6 +73,25 @@
                 transform: rotate(360deg);
             }
         }
+        /* FAQ Accordion Styles */
+.faq-answer {
+  display: none; /* Initially hide the answers */
+}
+
+.faq-item.active .faq-answer {
+  display: block; /* Show answer when active */
+}
+
+.faq-question {
+  border: 1px solid #dfdfdf;
+  background-color: #f2f2f7;
+  cursor: pointer;
+  margin-bottom: 0; /* Remove margin-bottom if any */
+}
+
+.faq-question:focus {
+  outline: none; /* Remove focus outline */
+}
     </style>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4705482165784547"
@@ -144,7 +163,42 @@
         </table>
     </div>
 
-    <div class="px-6 py-12 md:px-12">
+    <section>
+    <!-- FAQ Container -->
+    <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:py-32">
+        <!-- FAQ Title -->
+        <div class="mb-8 text-center md:mb-12 lg:mb-16">
+            <h2 class="text-2xl font-bold md:text-4xl max-w-2xl mx-auto text-center text-gray-900 leading-normal mb-12">FAQ</h2>
+        </div>
+        <!-- FAQ Content -->
+        <div class="flex flex-col items-center">
+             <!-- FAQ Item 1 -->
+             <div class="faq-item mb-6 max-w-4xl w-full">
+                <button class="faq-question text-xl font-bold w-full text-left py-5 px-8">Is Luvvoice free to use?</button>
+                <div class="faq-answer p-8 border border-t-0">
+                    <p>Yes, Luvvoice is completely free to use.Free text to speech over 50 language and 200 voice,no word limit. Listen online and download files in mp3 format.</p>
+                </div>
+            </div>
+            <!-- FAQ Item 2 -->
+            <div class="faq-item mb-6 max-w-4xl w-full">
+                <button class="faq-question text-xl font-bold w-full text-left py-5 px-8">How do I convert text to speech?</button>
+                <div class="faq-answer p-8 border border-t-0">
+                    <p>Converting text to speech is easy. Simply paste or type the text into the designated text box, choose the language for the text and your preferred voice style, and click the 'Submit' button to initiate the process. The text will be processed, and you can download the audio file.</p>
+                </div>
+            </div>
+            <!-- FAQ Item 3 -->
+            <div class="faq-item mb-6 max-w-4xl w-full">
+                <button class="faq-question text-xl font-bold w-full text-left py-5 px-8">Can I use the synthesized speech for commercial use?</button>
+                <div class="faq-answer p-8 border border-t-0">
+                    <p>Yes, all voices from Luvvoice are suitable for commercial projects such as videos, podcasts, gaming characters, Youtube and TikTok, and you are not required to attribute the source.</p>
+                </div>
+            </div>
+            <!-- Additional FAQ items if any ... -->
+        </div>
+    </div>
+    </section>
+
+    <div class="px-6 py-6 md:px-12">
         <div class="text-sm w-full p-12 text-center bg-blue-100 text-blue-900">
             Copyright &copy; 2024 <a href="https://luvvoice.com">Luvvoice.com</a> | <a href="/privacy-policy">Privacy Policy</a> | <a href="/tos">Terms of Service</a> 
         </div>
@@ -181,6 +235,34 @@ $('#myForm').on('submit', function(e) {
         $('#downloadBtn').prop('disabled', true);
     }
   });
+});
+    document.addEventListener('DOMContentLoaded', function () {
+    // Select all the FAQ question buttons
+    var faqQuestions = document.querySelectorAll('.faq-question');
+
+    // Loop through each question button
+    faqQuestions.forEach(function (question) {
+        question.addEventListener('click', function () {
+            // Get the parent '.faq-item' element
+            var faqItem = this.closest('.faq-item');
+
+            // Check if the clicked question is already active
+            var isActive = faqItem.classList.contains('active');
+
+            // Close all active FAQ answers
+            var allItems = document.querySelectorAll('.faq-item');
+            allItems.forEach(function (item) {
+                item.classList.remove('active');
+                item.querySelector('.faq-answer').style.display = 'none';
+            });
+
+            // If the clicked question was not active, open it
+            if (!isActive) {
+                faqItem.classList.add('active');
+                faqItem.querySelector('.faq-answer').style.display = 'block';
+            }
+        });
+    });
 });
 
 </script>
