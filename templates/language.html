@@ -85,9 +85,8 @@
         
         <div class="bg-gray-lighter md:h-full md:flex-1 bg-cover bg-center  bg-no-repeat" style="background-image: url('/static/tts.png'); transform: scale(0.73);  margin-right: -4rem;">
         </div>
-        <!-- 此处省略的代码 -->
+       
 
-        <!-- 语言选择和文本转语音转换表单 -->
         <div class="bg-orange-100 text-orange-900 md:h-full w-full md:flex-1 flex justify-center items-center" style="margin-left: -7rem;">
             <div class="px-8 md:px-16">
                 <form id="myForm">
@@ -102,7 +101,6 @@
                             <option value="">Select a voice...</option>
                             {% for description, code in voices %}
                                 {% if loop.first %}
-                                <!-- 标记第一个选项为默认选中 -->
                                 <option value="{{ code }}" selected>{{ description }}</option>
                                 {% else %}
                                 <option value="{{ code }}">{{ description }}</option>
@@ -117,8 +115,7 @@
             </div>
         </div>
     </div>
-    <!-- 下方为额外信息和版权声明等 -->
-    <!-- 此处省略的代码 -->
+    
 
     <div class="px-6 py-4 md:px-12" id="more"> <!-- py-12 to py-8 -->
         <h2 class="text-2xl md:text-4xl max-w-2xl mx-auto text-center text-gray-900 leading-normal mb-12" style="margin-top: -5%;">Text to speech for free</h2>
@@ -127,7 +124,7 @@
     </div>
 
 
-    <!-- 语言选择表格，此部分将被放置在文案和页脚之间 -->
+    
     <div class="w-full text-center py-4">
         <h1 class="text-lg font-bold mb-4">Choose a language:</h1>
         <table class="mx-auto border-collapse border border-gray-400">
@@ -137,7 +134,6 @@
                 <tr>
                 {% endif %}
                     <td class="border border-gray-400 px-4 py-2">
-                        <!-- 创建指向语言特定页面的链接 -->
                         <a href="{{ url_for('language_route', language=language_description) }}">
                             {{ language_description }}
                         </a>
