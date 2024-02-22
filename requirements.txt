@@ -1,3 +1,4 @@
 flask
 edge_tts
 anyio
+Flask-Cors
