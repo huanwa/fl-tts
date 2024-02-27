@@ -8,6 +8,7 @@ import datetime
 import random
 import string
 from flask_cors import CORS
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 languages = defaultdict(list)
 for description, code in tts_order_voice.items():
@@ -22,6 +23,7 @@ app = Flask(__name__)
 language_dict = tts_order_voice
 CORS(app, origins="https://luvvoice.com")
 app.config['PREFERRED_URL_SCHEME'] = 'https'
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 async def text_to_speech_edge(text, language_code):
     voice = language_code
