@@ -16,11 +16,11 @@ for description, code in tts_order_voice.items():
 
 
 languages = dict(languages)
-
+app.config['PREFERRED_URL_SCHEME'] = 'https'
 
 app = Flask(__name__)
 language_dict = tts_order_voice
-CORS(app)
+CORS(app, origins="https://luvvoice.com")
 
 async def text_to_speech_edge(text, language_code):
     voice = language_code
