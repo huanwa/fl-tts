@@ -9,7 +9,6 @@ import random
 import string
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
-from flask import send_from_directory, abort, safe_join
 
 languages = defaultdict(list)
 for description, code in tts_order_voice.items():
@@ -61,17 +60,6 @@ def handle_text_to_speech():
         'result_text': result_text,
         'result_audio_url': result_audio_url
     })
-
-
-@app.route('/download/<filename>')
-def download(filename):
-    directory = app.static_folder  # 确保这里的 app.static_folder 正确设置了静态文件文件夹的路径
-    try:
-        # 使用 safe_join 来避免路径遍历的安全问题
-        safe_path = safe_join(directory, filename)
-        return send_from_directory(directory=safe_path, filename=filename, as_attachment=True)
-    except FileNotFoundError:
-        abort(404)
     
 
 @app.route('/tos', methods=['GET']) 
