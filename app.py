@@ -9,7 +9,7 @@ import random
 import string
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
-from flask import send_from_directory,abort, safe_join
+from flask import send_from_directory, abort, safe_join
 
 languages = defaultdict(list)
 for description, code in tts_order_voice.items():
@@ -25,7 +25,6 @@ language_dict = tts_order_voice
 CORS(app, origins="https://luvvoice.com")
 app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
-
 
 async def text_to_speech_edge(text, language_code):
     voice = language_code
@@ -62,7 +61,7 @@ def handle_text_to_speech():
         'result_text': result_text,
         'result_audio_url': result_audio_url
     })
-    
+
 
 @app.route('/download/<filename>')
 def download(filename):
@@ -73,7 +72,7 @@ def download(filename):
         return send_from_directory(directory=safe_path, filename=filename, as_attachment=True)
     except FileNotFoundError:
         abort(404)
-
+    
 
 @app.route('/tos', methods=['GET']) 
 def tos():
