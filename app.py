@@ -20,7 +20,7 @@ for description, code in tts_order_voice.items():
 languages = dict(languages)
 
 
-app = Flask(__name__,static_folder='/var/www/fl-tts/static')
+app = Flask(__name__)
 language_dict = tts_order_voice
 CORS(app, origins="https://luvvoice.com")
 app.config['PREFERRED_URL_SCHEME'] = 'https'
