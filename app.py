@@ -10,6 +10,7 @@ import string
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask import send_file
+from flask import send_from_directory
 
 languages = defaultdict(list)
 for description, code in tts_order_voice.items():
@@ -50,7 +51,6 @@ def index():
 
 @app.route('/text_to_speech', methods=['POST'])
 def handle_text_to_speech():
-    # 处理文本到语音转换
     data = request.form
     text = data['text']
     language_code = data['language_code']
@@ -59,8 +59,8 @@ def handle_text_to_speech():
     # 生成音频文件的路径
     result_audio_path = generate_audio_file(result_filename)
     
-    # 发送动态生成的音频文件作为响应
-    return send_file(result_audio_path, as_attachment=True, download_name ='audio.mp3')
+    # 直接返回音频文件
+    return send_from_directory(app.config['UPLOAD_FOLDER'], result_filename, as_attachment=True, download_name='audio.mp3')
 
 def generate_audio_file(filename):
     # 生成音频文件的路径
