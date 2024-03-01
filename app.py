@@ -26,6 +26,7 @@ language_dict = tts_order_voice
 CORS(app, origins="https://luvvoice.com")
 app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+app.config['UPLOAD_FOLDER'] = '/var/www/fl-tts/static'
 
 async def text_to_speech_edge(text, language_code):
     voice = language_code
