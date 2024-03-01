@@ -60,7 +60,7 @@ def handle_text_to_speech():
     result_audio_path = generate_audio_file(result_filename)
     
     # 发送动态生成的音频文件作为响应
-    return send_file(result_audio_path, as_attachment=True, attachment_filename='audio.mp3')
+    return send_file(result_audio_path, as_attachment=True, download_name ='audio.mp3')
 
 def generate_audio_file(filename):
     # 生成音频文件的路径
