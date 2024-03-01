@@ -20,12 +20,12 @@ for description, code in tts_order_voice.items():
 languages = dict(languages)
 
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='/var/www/fl-tts/static')
 language_dict = tts_order_voice
 CORS(app, origins="https://luvvoice.com")
 app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
-app = Flask(__name__, static_folder='/var/www/fl-tts/static')
+
 
 async def text_to_speech_edge(text, language_code):
     voice = language_code
