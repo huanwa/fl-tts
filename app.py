@@ -9,7 +9,7 @@ import random
 import string
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
-from flask import send_from_directory
+from flask import send_from_directory,abort, safe_join
 
 languages = defaultdict(list)
 for description, code in tts_order_voice.items():
@@ -25,6 +25,7 @@ language_dict = tts_order_voice
 CORS(app, origins="https://luvvoice.com")
 app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+app = Flask(__name__, static_folder='/var/www/fl-tts/static')
 
 async def text_to_speech_edge(text, language_code):
     voice = language_code
@@ -65,10 +66,13 @@ def handle_text_to_speech():
 
 @app.route('/download/<filename>')
 def download(filename):
-    directory = app.static_folder
-    response = send_from_directory(directory=directory, filename=filename, as_attachment=True)
-    response.headers["Content-Disposition"] = "attachment; filename={}".format(filename)
-    return response
+    directory = app.static_folder  # 确保这里的 app.static_folder 正确设置了静态文件文件夹的路径
+    try:
+        # 使用 safe_join 来避免路径遍历的安全问题
+        safe_path = safe_join(directory, filename)
+        return send_from_directory(directory=safe_path, filename=filename, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
 
 
 @app.route('/tos', methods=['GET']) 
