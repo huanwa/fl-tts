@@ -64,12 +64,11 @@ def handle_text_to_speech():
     
 
 @app.route('/download/<filename>')
-def download_file(filename):
-    # 确认该文件名仅包含安全字符，以避免路径遍历攻击
-    if not re.match("^[a-zA-Z0-9._-]+$", filename):
-        return "Invalid filename", 400
-    static_dir = '/var/www/fl-tts/static'
-    return send_from_directory(directory=static_dir, path=filename, as_attachment=True)
+def download(filename):
+    directory = app.static_folder
+    response = send_from_directory(directory=directory, filename=filename, as_attachment=True)
+    response.headers["Content-Disposition"] = "attachment; filename={}".format(filename)
+    return response
 
 
 @app.route('/tos', methods=['GET']) 
