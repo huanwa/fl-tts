@@ -9,6 +9,7 @@ import random
 import string
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
+from flask import send_from_directory
 
 languages = defaultdict(list)
 for description, code in tts_order_voice.items():
@@ -61,6 +62,15 @@ def handle_text_to_speech():
         'result_audio_url': result_audio_url
     })
     
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    # 确认该文件名仅包含安全字符，以避免路径遍历攻击
+    if not re.match("^[a-zA-Z0-9._-]+$", filename):
+        return "Invalid filename", 400
+    static_dir = '/var/www/fl-tts/static'
+    return send_from_directory(directory=static_dir, path=filename, as_attachment=True,mimetype='audio/mpeg')
+
 
 @app.route('/tos', methods=['GET']) 
 def tos():
