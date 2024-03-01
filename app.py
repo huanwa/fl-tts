@@ -54,12 +54,18 @@ def handle_text_to_speech():
     text = data['text']
     language_code = data['language_code']
     result_text, result_filename = anyio.run(text_to_speech_edge, text, language_code)
-    result_audio_url = url_for('static', filename=result_filename, _external=True)
-    # 返回JSON
-    return jsonify({
-        'result_text': result_text,
-        'result_audio_url': result_audio_url
-    })
+    
+    # 生成音频文件的路径
+    result_audio_path = generate_audio_file(result_filename)
+    
+    # 发送动态生成的音频文件作为响应
+    return send_file(result_audio_path, as_attachment=True, attachment_filename='audio.mp3')
+
+def generate_audio_file(filename):
+    # 生成音频文件的路径
+    static_dir = os.path.join(app.root_path, 'static')
+    result_audio_path = os.path.join(static_dir, filename)
+    return result_audio_path
     
 
 @app.route('/tos', methods=['GET']) 
