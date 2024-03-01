@@ -9,8 +9,6 @@ import random
 import string
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
-from flask import send_file
-from flask import send_from_directory
 
 languages = defaultdict(list)
 for description, code in tts_order_voice.items():
@@ -26,7 +24,6 @@ language_dict = tts_order_voice
 CORS(app, origins="https://luvvoice.com")
 app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
-app.config['UPLOAD_FOLDER'] = '/var/www/fl-tts/static'
 
 async def text_to_speech_edge(text, language_code):
     voice = language_code
@@ -52,22 +49,17 @@ def index():
 
 @app.route('/text_to_speech', methods=['POST'])
 def handle_text_to_speech():
+    # 处理文本到语音转换
     data = request.form
     text = data['text']
     language_code = data['language_code']
     result_text, result_filename = anyio.run(text_to_speech_edge, text, language_code)
-    
-    # 生成音频文件的路径
-    result_audio_path = generate_audio_file(result_filename)
-    
-    # 直接返回音频文件
-    return send_from_directory(app.config['UPLOAD_FOLDER'], result_filename, as_attachment=True, download_name='audio.mp3')
-
-def generate_audio_file(filename):
-    # 生成音频文件的路径
-    static_dir = os.path.join(app.root_path, 'static')
-    result_audio_path = os.path.join(static_dir, filename)
-    return result_audio_path
+    result_audio_url = url_for('static', filename=result_filename, _external=True)
+    # 返回JSON
+    return jsonify({
+        'result_text': result_text,
+        'result_audio_url': result_audio_url
+    })
     
 
 @app.route('/tos', methods=['GET']) 
