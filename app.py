@@ -20,7 +20,7 @@ for description, code in tts_order_voice.items():
 languages = dict(languages)
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='/var/www/fl-tts/static')
 language_dict = tts_order_voice
 CORS(app, origins="https://luvvoice.com")
 app.config['PREFERRED_URL_SCHEME'] = 'https'
@@ -63,13 +63,33 @@ def handle_text_to_speech():
     })
     
 
-@app.route('/download/<filename>')
-def download_file(filename):
-    # 确认该文件名仅包含安全字符，以避免路径遍历攻击
-    if not re.match("^[a-zA-Z0-9._-]+$", filename):
-        return "Invalid filename", 400
-    static_dir = '/var/www/fl-tts/static'
-    return send_from_directory(directory=static_dir, path=filename, as_attachment=True,mimetype='audio/mpeg')
+@app.route('/text_to_speech_', methods=['POST'])
+def handle_text_to_speech():
+    # 处理文本到语音转换
+    data = request.form
+    text = data['text']
+    language_code = data['language_code']
+    result_text, result_filename = anyio.run(text_to_speech_edge, text, language_code)
+    
+    # 生成播放的URL
+    result_audio_url = url_for('static', filename=result_filename, _external=True)
+    
+    # 生成下载的URL
+    result_download_url = url_for('download_audio', filename=result_filename, _external=True)
+    
+    # 返回JSON
+    return jsonify({
+        'result_text': result_text,
+        'result_audio_url': result_audio_url,      # 用于播放的URL
+        'result_download_url': result_download_url # 用于下载的URL
+    })
+
+
+
+@app.route('/download/<filename>', methods=['GET'])
+def download_audio(filename):
+    # 以附件形式发送文件以供下载
+    return send_from_directory(app.static_folder, filename, as_attachment=True)
 
 
 @app.route('/tos', methods=['GET']) 
