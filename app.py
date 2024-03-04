@@ -20,7 +20,7 @@ for description, code in tts_order_voice.items():
 languages = dict(languages)
 
 
-app = Flask(__name__, static_folder='/var/www/fl-tts/static')
+app = Flask(__name__)
 language_dict = tts_order_voice
 CORS(app, origins="https://luvvoice.com")
 app.config['PREFERRED_URL_SCHEME'] = 'https'
@@ -63,26 +63,6 @@ def handle_text_to_speech():
     })
     
 
-@app.route('/text_to_speech_', methods=['POST'])
-def handle_text_to_speech():
-    # 处理文本到语音转换
-    data = request.form
-    text = data['text']
-    language_code = data['language_code']
-    result_text, result_filename = anyio.run(text_to_speech_edge, text, language_code)
-    
-    # 生成播放的URL
-    result_audio_url = url_for('static', filename=result_filename, _external=True)
-    
-    # 生成下载的URL
-    result_download_url = url_for('download_audio', filename=result_filename, _external=True)
-    
-    # 返回JSON
-    return jsonify({
-        'result_text': result_text,
-        'result_audio_url': result_audio_url,      # 用于播放的URL
-        'result_download_url': result_download_url # 用于下载的URL
-    })
 
 
 
