@@ -73,7 +73,7 @@ def handle_text_to_speech_():
     
     # 生成播放的URL
     result_audio_url = url_for('static', filename=result_filename, _external=True)
-    
+    print（result_audio_url）
     # 生成下载的URL
     result_download_url = url_for('download_audio', filename=result_filename, _external=True)
     
