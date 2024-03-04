@@ -89,8 +89,7 @@ def handle_text_to_speech_():
 
 @app.route('/download/<filename>')
 def download_audio(filename):
-    directory = '/var/www/fl-tts/static'  # 确保这是你的静态文件目录
-    response = send_from_directory(directory, filename, as_attachment=True)
+    response = send_from_directory('static', filename, as_attachment=True)
     response.headers["Content-Disposition"] = "attachment; filename={}".format(filename)
     return response
 
