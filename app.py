@@ -75,7 +75,7 @@ def handle_text_to_speech_():
     result_audio_url = url_for('static', filename=result_filename, _external=True)
 
     # 生成下载的URL
-    result_download_url = url_for('download_audio', filename=result_filename, _external=True)
+    result_download_url = url_for('static', filename=result_filename, _external=True)
     
     # 返回JSON
     return jsonify({
