@@ -22,7 +22,7 @@ languages = dict(languages)
 
 app = Flask(__name__)
 language_dict = tts_order_voice
-CORS(app, origins="https://luvvoice.com")
+CORS(app)
 app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
