@@ -25,7 +25,7 @@ CLOUDFLARE_R2_BUCKET_URL = 'https://pub-8a6c901f26754c4bbd4f79e70e61d104.r2.dev'
 
 app = Flask(__name__)
 language_dict = tts_order_voice
-CORS(app)
+CORS(app, origins="https://luvvoice.com")
 app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
@@ -93,8 +93,8 @@ def upload_file_to_r2(file_path, filename):
     client = session.client(
         service_name='s3',
         endpoint_url=r2_endpoint_url,
-        aws_access_key_id='e528732c80abcd47f037c9d75c936324',
-        aws_secret_access_key='a75ded086590daaa83abdb608b7e7b195862282fa01e567f9ca6df2aaa9b0df4',
+        aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+        aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
         config=Config(signature_version='s3v4'),
     )
 
