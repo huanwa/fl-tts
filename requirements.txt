@@ -2,3 +2,4 @@ flask
 edge_tts
 anyio
 Flask-Cors
+boto3
